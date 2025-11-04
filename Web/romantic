@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 温馨提示 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: '微软雅黑', 'Microsoft YaHei', Arial, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+        }
+
+        /* 初始弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+            padding: 50px 60px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.5s ease;
+            max-width: 90%;
+        }
+
+        .modal-title {
+            font-size: 42px;
+            color: #fff;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .modal-emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        .confirm-btn {
+            background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 20, 147, 0.4);
+            font-weight: bold;
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(255, 20, 147, 0.6);
+        }
+
+        .confirm-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* 小窗口样式 */
+        .tip-window {
+            position: fixed;
+            width: 280px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            text-align: center;
+            z-index: 100;
+            animation: popIn 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* 大爱心容器 */
+        .heart-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 1s ease;
+        }
+
+        .big-heart {
+            font-size: 250px;
+            color: #FF1493;
+            animation: heartbeat 1.5s infinite;
+            text-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
+        }
+
+        /* 动画定义 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10%, 30% {
+                transform: scale(0.9);
+            }
+            20%, 40%, 60%, 80% {
+                transform: scale(1.1);
+            }
+            50%, 70% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 30px 40px;
+            }
+
+            .modal-title {
+                font-size: 32px;
+            }
+
+            .modal-emoji {
+                font-size: 60px;
+            }
+
+            .confirm-btn {
+                font-size: 20px;
+                padding: 15px 40px;
+            }
+
+            .tip-window {
+                width: 220px;
+                font-size: 16px;
+                padding: 15px;
+            }
+
+            .big-heart {
+                font-size: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 初始弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-emoji">💌</div>
+            <div class="modal-title">请查收</div>
+            <button class="confirm-btn" onclick="startShow()">确认</button>
+        </div>
+    </div>
+
+    <!-- 大爱心容器 -->
+    <div class="heart-container" id="heartContainer">
+        <div class="big-heart">❤</div>
+    </div>
+
+    <script>
+        // 兄弟情谊文字列表
+        const tips = [
+            '兄弟，多喝水少喝酒', '保持健康，身体第一', '兄弟一起加油',
+            '记得按时吃饭', '有困难记得找我', '兄弟永远挺你', '想你了兄弟',
+            '愿你梦想成真', '期待下次聚会', '兄弟考试加油',
+            '一切顺利', '别熬夜了兄弟', '有事就说，别憋着',
+            '注意身体，别太拼', '今天过得还好吗', '天冷了多穿点',
+            '你是我最铁的兄弟', '兄弟情义永不变', '你的笑容很爷们',
+            '想和你喝一杯', '有你这个兄弟真好', '咱们是一辈子的兄弟',
+            '今天也要元气满满', '你是最棒的', '认识你是我的幸运',
+            '一起看日出日落', '你的快乐我在意', '咱们是过命的交情',
+            '不离不弃', '你永远是我兄弟', '今天也想你了',
+            '给你一个熊抱', '你值得最好的', '我永远在你身后',
+            '有福同享有难同当', '你是我的好兄弟', '每天都想和你聊天',
+            '你的笑容很灿烂', '和你在一起很开心', '兄弟情深似海',
+            '患难见真情', '兄弟齐心，其利断金', '永远的好兄弟',
+            '一起经历风雨', '有你真好兄弟', '咱们的友谊天长地久'
+        ];
+
+        // 背景颜色列表
+        const bgColors = [
+            '#FFB6C1', '#87CEEB', '#90EE90', '#E6E6FA',
+            '#FFFFE0', '#DDA0DD', '#FF7F50', '#FFE4C4',
+            '#7FFFD4', '#FFE4E1', '#F0FFF0', '#FFF0F5', '#FDF5E6'
+        ];
+
+        // 配置参数
+        const totalWindows = 80; // 窗口数量（可调整）
+        const closeDelay = 10000; // 统一关闭时间（毫秒）- 10秒
+        const createInterval = 100; // 创建窗口的间隔（毫秒）- 弹出更慢
+
+        let windowElements = [];
+        let startTime;
+
+        // 随机选择数组元素
+        function randomChoice(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // 创建一个温馨提示窗口
+        function createTipWindow() {
+            const tipWindow = document.createElement('div');
+            tipWindow.className = 'tip-window';
+            
+            // 随机位置（确保窗口在视窗内）
+            const maxX = window.innerWidth - 300;
+            const maxY = window.innerHeight - 100;
+            const x = Math.random() * Math.max(0, maxX);
+            const y = Math.random() * Math.max(0, maxY);
+            
+            tipWindow.style.left = x + 'px';
+            tipWindow.style.top = y + 'px';
+            
+            // 随机文字和颜色
+            tipWindow.textContent = randomChoice(tips);
+            tipWindow.style.backgroundColor = randomChoice(bgColors);
+            
+            // 添加到页面
+            document.body.appendChild(tipWindow);
+            windowElements.push(tipWindow);
+            
+            // 计算剩余时间，统一关闭
+            const elapsed = Date.now() - startTime;
+            const remaining = closeDelay - elapsed;
+            
+            if (remaining > 0) {
+                setTimeout(() => {
+                    tipWindow.style.animation = 'fadeOut 1s ease';
+                    setTimeout(() => {
+                        if (tipWindow.parentNode) {
+                            tipWindow.remove();
+                        }
+                    }, 1000);
+                }, remaining);
+            } else {
+                tipWindow.remove();
+            }
+        }
+
+        // 显示大爱心
+        function showFinalHeart() {
+            const heartContainer = document.getElementById('heartContainer');
+            heartContainer.style.display = 'flex';
+        }
+
+        // 开始展示
+        function startShow() {
+            // 隐藏初始弹窗
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalOverlay.style.animation = 'fadeIn 0.5s ease reverse';
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+            }, 500);
+            
+            // 记录开始时间
+            startTime = Date.now();
+            
+            // 创建多个窗口
+            let count = 0;
+            const interval = setInterval(() => {
+                createTipWindow();
+                count++;
+                
+                if (count >= totalWindows) {
+                    clearInterval(interval);
+                }
+            }, createInterval);
+            
+            // 延迟显示大爱心（等待窗口淡出完成）
+            setTimeout(() => {
+                showFinalHeart();
+            }, closeDelay + 1500);
+        }
+
+        // 防止页面滚动
+        document.body.style.overflow = 'hidden';
+    </script>
+</body>
+</html>
+
