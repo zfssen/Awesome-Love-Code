@@ -106,6 +106,7 @@
             display: none;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             z-index: 9999;
             animation: fadeIn 1s ease;
         }
@@ -115,6 +116,16 @@
             color: #FF1493;
             animation: heartbeat 1.5s infinite;
             text-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .heart-text {
+            font-size: 60px;
+            color: #FF1493;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+            animation: fadeIn 1s ease 0.5s both;
+            letter-spacing: 10px;
         }
 
         /* 动画定义 */
@@ -211,6 +222,12 @@
 
             .big-heart {
                 font-size: 150px;
+                margin-bottom: 20px;
+            }
+
+            .heart-text {
+                font-size: 40px;
+                letter-spacing: 5px;
             }
         }
     </style>
@@ -228,6 +245,7 @@
     <!-- 大爱心容器 -->
     <div class="heart-container" id="heartContainer">
         <div class="big-heart">❤</div>
+        <div class="heart-text">老铁</div>
     </div>
 
     <script>
